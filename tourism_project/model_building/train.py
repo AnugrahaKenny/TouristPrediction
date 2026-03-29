@@ -102,7 +102,7 @@ joblib.dump(best_model, "best_tourism_prediction_model_v1.joblib")
 
 
 # Upload to Hugging Face
-repo_id = "AnugrahaKenny/TouristPrediction" 
+repo_id = "AnugrahaKenny/TouristPrediction"
 repo_type = "model"
 
 api = HfApi(token=os.getenv("HF_TOKEN"))
