@@ -100,7 +100,7 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          # Install dependencies required for the hosting script and the Streamlit app
+          # Install dependencies required for the hosting script and the Streamlit app 
           pip install huggingface-hub
           # The Streamlit app's specific requirements.txt will be handled by Dockerfile
       
