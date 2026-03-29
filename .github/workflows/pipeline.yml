@@ -1,3 +1,4 @@
+```yaml
 name: Tourism Package Prediction MLOps Pipeline
 
 on:
@@ -21,14 +22,14 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas datasets huggingface-hub scikit-learn
+          pip install -r tourism_project/requirements.txt
       
       - name: Upload Dataset to Hugging Face Hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           cd tourism_project
-          python data_registration.py
+          python model_building/data_register.py
 
   data-prep:
     needs: register-dataset
@@ -44,14 +45,14 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy scikit-learn datasets huggingface-hub
+          pip install -r tourism_project/requirements.txt
       
       - name: Run Data Preparation
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           cd tourism_project
-          python data_preparation.py
+          python model_building/prep.py
 
   model-training:
     needs: data-prep
@@ -67,10 +68,12 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy scikit-learn xgboost mlflow datasets huggingface-hub joblib
+          pip install -r tourism_project/requirements.txt
       
       - name: Start MLflow Server
         run: |
+          # Note: MLflow server is started here, but the train.py script does not
+          # currently integrate with MLflow logging. This is a placeholder.
           nohup mlflow ui --host 0.0.0.0 --port 5000 &  # Run MLflow UI in the background
           sleep 5  # Wait for a moment to let the server start
       
@@ -80,7 +83,7 @@ jobs:
           MLFLOW_TRACKING_URI: http://localhost:5000
         run: |
           cd tourism_project
-          python model_building.py
+          python model_building/train.py
 
   deploy-hosting:
     runs-on: ubuntu-latest
@@ -96,11 +99,15 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
+          # Install dependencies required for the hosting script and the Streamlit app
           pip install huggingface-hub
+          # The Streamlit app's specific requirements.txt will be handled by Dockerfile
       
       - name: Push files to Frontend Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          cd tourism_project/deployment
-          python deploy_to_hf.py 
+          cd tourism_project
+          python hosting/hosting.py
+
+```
