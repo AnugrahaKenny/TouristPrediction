@@ -5,7 +5,7 @@ import joblib
 
 # Download and load the model from Hugging Face Hub
 model_path = hf_hub_download(
-    repo_id="AnugrahaKenny/TouristPrediction", # Updated repo ID
+    repo_id="AnuKenny/TouristPrediction", # Updated repo ID
     filename="best_tourism_prediction_model_v1.joblib" # Updated filename
 )
 model = joblib.load(model_path)
