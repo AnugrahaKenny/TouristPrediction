@@ -3,7 +3,7 @@ name: Tourism Package Prediction MLOps Pipeline
 on:
   push:
     branches:
-      - main  # Automatically triggers on push to the main branch
+      - main  # Automatically trigger on push to the main branch
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
